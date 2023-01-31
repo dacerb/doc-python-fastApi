@@ -94,3 +94,4 @@ Para consultar la especificación podemos hacerlo en el siguiente [LINK](http://
 
 En FastApi tenemos Swagger UI y ReDoc, pero si tomamos la especificación la vamos a poder importar a otras plataformas de visualización.
 
+**Para visualizar la documentacion con redoc podemos hacerlo a traves del link:** `http://127.0.0.1:8000/redoc`
