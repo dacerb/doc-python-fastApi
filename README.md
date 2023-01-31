@@ -51,3 +51,46 @@ INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     127.0.0.1:63284 - "GET / HTTP/1.1" 200 OK
 ```
+
+---
+
+FastAPi implementa de base la documentacion de las API utilizando la especificacion de OAP
+para poder acceder a la documentacion basta con ir al endpoint /docs `http://127.0.0.1:8000/docs`
+
+Para consultar la especificación podemos hacerlo en el siguiente [LINK](http://127.0.0.1:8000/openapi.json)
+> La especificación seria la definición de como funciona y queremos mostrar la documentación
+```
+// 20230131085752
+// http://127.0.0.1:8000/openapi.json
+
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "FastAPI",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Home",
+        "operationId": "home__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+En FastApi tenemos Swagger UI y ReDoc, pero si tomamos la especificación la vamos a poder importar a otras plataformas de visualización.
+
