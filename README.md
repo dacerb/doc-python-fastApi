@@ -103,3 +103,29 @@ path operation comprende a todo lo que viene
 ### PATH PARAMETERs
 
 ### PATH, PARAMETERs, + Query Parameters
+
+
+--- 
+Si algún parametro es obligatorio debe ser un path parameter..
+en caso de no ser obligatorio es un query parameter
+
+> Query parametres restricciones:
+
+````
+ge -> greater or equal than >=
+le -> less or equal than <=
+gt -> greater than >
+lt -> less than <
+
+max_legth=int
+min_legth=int
+regex="pattern"
+
+````
+Mejorar la visibilidad de los parametros en la doc automatica
+
+Title,
+Description (Sirven para acompañar la documentación.)
+
+
+
