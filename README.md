@@ -1,6 +1,6 @@
 # doc-python-fastApi
 Curso de FastAPi
-
+[**doc_**](https://hackmd.io/@duvanbotello/rk8vjxCrt#Validaciones-Query-Parameters)
 
 FastApi implementa starlette, uvicorn, pydantic que son grandes frameworks y librerias en python.
 Y les agrega mejoras.
