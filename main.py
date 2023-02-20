@@ -28,6 +28,7 @@ class Person(BaseModel):
     hair_color: Optional[str] = None
     is_married: Optional[bool] = None
 
+
 class PersonTwo(BaseModel):
     fist_name: str = Field(
         ...,
@@ -47,12 +48,68 @@ class PersonTwo(BaseModel):
     hair_color: Optional[HairColor] = Field(default=None)
     is_married: Optional[bool] = Field(default=None)
 
+class PersonThree(BaseModel):
+    fist_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+    )
+    last_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+    )
+    age: int = Field(
+        ...,
+        gt=0,
+        le=115
+    )
+    hair_color: Optional[HairColor] = Field(default=None)
+    is_married: Optional[bool] = Field(default=None)
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "fist_name": "david",
+                "last_name": "XS",
+                "age": 21,
+                "hair_color": "white",
+                "is_married": False
+            }
+        }
+
+
+
+# cargando los ejemplos en la definicion
+class PersonFour(BaseModel):
+    fist_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50,
+        example="david"
+    )
+    last_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50,
+        example="qweqweqweqwe"
+    )
+    age: int = Field(
+        ...,
+        gt=0,
+        le=115,
+        example=66
+    )
+    hair_color: Optional[HairColor] = Field(default=None, example="red")
+    is_married: Optional[bool] = Field(default=None, example=False)
+
+
+
+
 class Locations(BaseModel):
     city: str
     state: str
     country: str
-
-
 
 @app.get("/")
 def home():
@@ -152,3 +209,36 @@ def update_person_two(
 
     return results
 
+
+@app.put("/person/three/{person_id}")
+def update_person_three(
+
+    person_id: int = Path(
+        ...,
+        title="Person ID",
+        description="This is the person ID",
+        gt=0
+    ),
+    person: PersonThree = Body(
+        ...,
+    )
+):
+    results = person.dict()
+    return results
+
+
+@app.put("/person/four/{person_id}")
+def update_person_four(
+
+    person_id: int = Path(
+        ...,
+        title="Person ID",
+        description="This is the person ID",
+        gt=0
+    ),
+    person: PersonFour = Body(
+        ...,
+    )
+):
+    results = person.dict()
+    return results
