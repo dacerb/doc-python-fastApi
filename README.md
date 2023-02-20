@@ -127,5 +127,7 @@ Mejorar la visibilidad de los parametros en la doc automatica
 Title,
 Description (Sirven para acompañar la documentación.)
 
+Typos de datos para validación [**LINK**](https://docs.pydantic.dev/usage/types/#pydantic-types)
+
 
 
