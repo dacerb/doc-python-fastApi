@@ -100,10 +100,34 @@ class PersonFour(BaseModel):
         le=115,
         example=66
     )
+    password: str = Field(
+        ...,
+        min_length=8
+    )
     hair_color: Optional[HairColor] = Field(default=None, example="red")
     is_married: Optional[bool] = Field(default=None, example=False)
 
-
+class PersonOut(BaseModel):
+    fist_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50,
+        example="david"
+    )
+    last_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50,
+        example="qweqweqweqwe"
+    )
+    age: int = Field(
+        ...,
+        gt=0,
+        le=115,
+        example=66
+    )
+    hair_color: Optional[HairColor] = Field(default=None, example="red")
+    is_married: Optional[bool] = Field(default=None, example=False)
 
 
 class Locations(BaseModel):
@@ -230,7 +254,9 @@ def update_person_three(
     return results
 
 
-@app.put("/person/four/{person_id}")
+
+
+@app.put("/person/four/{person_id}", response_model=PersonOut)
 def update_person_four(
 
     person_id: int = Path(
