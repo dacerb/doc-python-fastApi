@@ -36,8 +36,19 @@ def create_person(person: Person = Body(...)):      # Path operation function
 # validaciones query parameters
 @app.get('/person/detail')
 def show_person(
-        name: Optional[str] = Query(default=None, min_length=1, max_length=50, regex="^[a-zA-Z]*$", title="nombre de la persona", description="aca pone tu nombre papa"),
-        age: int = Query(...)
+        name: Optional[str] = Query(
+            default=None,
+            min_length=1,
+            max_length=50,
+            regex="^[a-zA-Z]*$",
+            title="Person Name",
+            description="This is the person name. It's between 1 and 50 characters"
+        ),
+        age: int = Query(
+            ...,
+            title="Person Age",
+            description="This is the person age. It's required"
+        )
 ):
     return {
         name: age
@@ -47,9 +58,16 @@ def show_person(
 # validaciones query parameters
 @app.get('/person/detail/{person_id}')
 def show_person(
-    person_id: int = Path(..., gt=0)
+    person_id: int = Path(
+        ...,
+        gt=0,
+        title="Person ID",
+        description="This is the person ID. this valeu greater That 0"
+
+    )
 ):
     return {
+        "detail": "it_exist!",
         person_id: person_id
     }
 
