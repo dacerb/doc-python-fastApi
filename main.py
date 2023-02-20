@@ -20,68 +20,12 @@ class HairColor(Enum):
     blonde = "blonde"
     red = "red"
 
-## models
-class Person(BaseModel):
-    fist_name: str
-    last_name: str
-    age: int
-    hair_color: Optional[str] = None
-    is_married: Optional[bool] = None
 
 
-class PersonTwo(BaseModel):
-    fist_name: str = Field(
-        ...,
-        min_length=1,
-        max_length=50
-    )
-    last_name: str = Field(
-        ...,
-        min_length=1,
-        max_length=50
-    )
-    age: int = Field(
-        ...,
-        gt=0,
-        le=115
-    )
-    hair_color: Optional[HairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default=None)
-
-class PersonThree(BaseModel):
-    fist_name: str = Field(
-        ...,
-        min_length=1,
-        max_length=50
-    )
-    last_name: str = Field(
-        ...,
-        min_length=1,
-        max_length=50
-    )
-    age: int = Field(
-        ...,
-        gt=0,
-        le=115
-    )
-    hair_color: Optional[HairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default=None)
-
-    class Config:
-        schema_extra = {
-            "example": {
-                "fist_name": "david",
-                "last_name": "XS",
-                "age": 21,
-                "hair_color": "white",
-                "is_married": False
-            }
-        }
-
-
+## MODELS
 
 # cargando los ejemplos en la definicion
-class PersonFour(BaseModel):
+class PersonBase(BaseModel):
     fist_name: str = Field(
         ...,
         min_length=1,
@@ -100,41 +44,23 @@ class PersonFour(BaseModel):
         le=115,
         example=66
     )
+    hair_color: Optional[HairColor] = Field(default=None, example="red")
+    is_married: Optional[bool] = Field(default=None, example=False)
+class Person(PersonBase):
     password: str = Field(
         ...,
         min_length=8
     )
-    hair_color: Optional[HairColor] = Field(default=None, example="red")
-    is_married: Optional[bool] = Field(default=None, example=False)
-
-class PersonOut(BaseModel):
-    fist_name: str = Field(
-        ...,
-        min_length=1,
-        max_length=50,
-        example="david"
-    )
-    last_name: str = Field(
-        ...,
-        min_length=1,
-        max_length=50,
-        example="qweqweqweqwe"
-    )
-    age: int = Field(
-        ...,
-        gt=0,
-        le=115,
-        example=66
-    )
-    hair_color: Optional[HairColor] = Field(default=None, example="red")
-    is_married: Optional[bool] = Field(default=None, example=False)
-
-
+class PersonOut(PersonBase):
+   pass
 class Locations(BaseModel):
     city: str
     state: str
     country: str
 
+
+
+###  ENDPOINTS
 @app.get("/")
 def home():
     return {"Hello": "world"}
@@ -191,7 +117,10 @@ def show_person(
 
 
 # validaciones: Request body
-@app.put("/person/{person_id}")
+
+
+
+@app.put("/person/{person_id}", response_model=PersonOut)
 def update_person(
 
     person_id: int = Path(
@@ -210,64 +139,4 @@ def update_person(
 ):
     results = person.dict()
     results.update(locations.dict())
-
-    return results
-
-
-
-@app.put("/person/two/{person_id}")
-def update_person_two(
-
-    person_id: int = Path(
-        ...,
-        title="Person ID",
-        description="This is the person ID",
-        gt=0
-    ),
-    person: PersonTwo = Body(
-        ...,
-    ),
-    locations: Locations = Body(
-        ...,
-    )
-):
-    results = person.dict()
-    results.update(locations.dict())
-
-    return results
-
-
-@app.put("/person/three/{person_id}")
-def update_person_three(
-
-    person_id: int = Path(
-        ...,
-        title="Person ID",
-        description="This is the person ID",
-        gt=0
-    ),
-    person: PersonThree = Body(
-        ...,
-    )
-):
-    results = person.dict()
-    return results
-
-
-
-
-@app.put("/person/four/{person_id}", response_model=PersonOut)
-def update_person_four(
-
-    person_id: int = Path(
-        ...,
-        title="Person ID",
-        description="This is the person ID",
-        gt=0
-    ),
-    person: PersonFour = Body(
-        ...,
-    )
-):
-    results = person.dict()
     return results
