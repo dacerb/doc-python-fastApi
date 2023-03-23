@@ -8,7 +8,8 @@ from pydantic import Field
 
 #FastAPI
 from fastapi import FastAPI
-from fastapi import Body, Query, Path
+from fastapi import status
+from fastapi import Body, Query, Path, Form
 
 app = FastAPI()
 
@@ -184,29 +185,52 @@ class Locations(BaseModel):
     country: str
 
 
-@app.get("/")
+
+class loginOut(BaseModel):
+    username: str = Field(..., max_length=20, example="miguel212")
+    message: str = "login successfuly"
+
+
+@app.get(
+        path="/",
+        status_code=status.HTTP_200_OK
+    )
 def home():
     return {"Hello": "world"}
 
 
 ## Request and Response body
 ## path operation path decoration
-@app.post("/person/new")  # Path operation decoration
+@app.post(
+    path="/person/new",
+    status_code=status.HTTP_201_CREATED
+)  # Path operation decoration
 def create_person(person: Person = Body(...)):      # Path operation function
     return person
 
-@app.post("/person/new/four", response_model=PersonFourOut)  # Path operation decoration
+@app.post(
+    path="/person/new/four",
+    response_model=PersonFourOut,
+    status_code=status.HTTP_201_CREATED
+)  # Path operation decoration
 def create_person(person: PersonFour = Body(...)):      # Path operation function
     return person
 
-@app.post("/person/new/four/fix", response_model=PersonFourOutFix)  # Path operation decoration
+@app.post(
+    path="/person/new/four/fix",
+    response_model=PersonFourOutFix,
+    status_code=status.HTTP_201_CREATED
+)  # Path operation decoration
 def create_person(person: PersonFourFix = Body(...)):      # Path operation function
     return person
 
 
 
 # validaciones query parameters
-@app.get('/person/detail')
+@app.get(
+    path='/person/detail',
+    status_code=status.HTTP_200_OK
+)
 def show_person(
         name: Optional[str] = Query(
             default=None,
@@ -228,7 +252,10 @@ def show_person(
 
 
 # validaciones query parameters
-@app.get('/person/detail/{person_id}')
+@app.get(
+    path='/person/detail/{person_id}',
+    status_code=status.HTTP_200_OK
+)
 def show_person(
     person_id: int = Path(
         ...,
@@ -269,7 +296,10 @@ def update_person(
 
 
 
-@app.put("/person/two/{person_id}")
+@app.put(
+    path="/person/two/{person_id}",
+    status_code=status.HTTP_200_OK
+)
 def update_person_two(
 
     person_id: int = Path(
@@ -291,7 +321,10 @@ def update_person_two(
     return results
 
 
-@app.put("/person/three/{person_id}")
+@app.put(
+    path="/person/three/{person_id}",
+    status_code=status.HTTP_200_OK
+)
 def update_person_three(
 
     person_id: int = Path(
@@ -308,7 +341,10 @@ def update_person_three(
     return results
 
 
-@app.put("/person/four/{person_id}")
+@app.put(
+    path="/person/four/{person_id}",
+    status_code=status.HTTP_200_OK
+)
 def update_person_four(
 
     person_id: int = Path(
@@ -323,3 +359,14 @@ def update_person_four(
 ):
     results = person.dict()
     return results
+
+
+@app.post(
+    path="/login",
+    response_model=loginOut,
+    status_code=status.HTTP_200_OK
+)
+def login(
+        username: str = Form(...), password: str = Form(...)
+):
+    return loginOut(username=username)
