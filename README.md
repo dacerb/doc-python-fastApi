@@ -136,3 +136,29 @@ Typos de datos para validación [**LINK**](https://docs.pydantic.dev/usage/types
 poetry add python-multipart
 poetry add pydantic[email]
 ````
+
+### Files
+
+[Files -> FastApi](https://fastapi.tiangolo.com/tutorial/request-files/)
+
+
+#### Tipos de entradas de datos en FastAPI:
+
+- ath Parameters -> URL y obligatorios
+- uery Parameters -> URL y opcionales
+- equest Body -> JSON
+- ormularios -> Campos en el frontend
+- eaders -> Cabeceras HTTP que pueden ser de cliente a servidor y viceversa
+- ookies -> Almacenan información
+- iles -> Archivos como imágenes, audio, vídeo, etc.
+Para manejar archivos con FastAPI necesitamos de las clases ‘File’ y ‘Upload File’.
+
+#### Upload file tiene 3 parámetros:
+
+- Filename -> Nombre del archivo
+- Content_Type -> Tipo de archivo
+- File -> El archivo en sí mismo
+
+
+![Captura de pantalla 2023-03-27 205438.png](Captura%20de%20pantalla%202023-03-27%20205438.png)
+
