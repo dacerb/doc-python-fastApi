@@ -134,4 +134,5 @@ Typos de datos para validación [**LINK**](https://docs.pydantic.dev/usage/types
 ## FORM 
 ````commandline
 poetry add python-multipart
+poetry add pydantic[email]
 ````
