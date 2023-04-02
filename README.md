@@ -162,3 +162,19 @@ Para manejar archivos con FastAPI necesitamos de las clases ‘File’ y ‘Uplo
 
 ![Captura de pantalla 2023-03-27 205438.png](Captura%20de%20pantalla%202023-03-27%20205438.png)
 
+
+# Ordenamiento de importacion 
+![Captura de pantalla 2023-04-02 120120.png](Captura%20de%20pantalla%202023-04-02%20120120.png)
+
+````commandline
+COMENTARIOS:
+
+https://pycqa.github.io/isort/
+https://peps.python.org/pep-0008/
+
+Les recomiendo utilizar isort, es comun usarlo en entornos laborales, 
+se puede configurar en lo editores de codigo junto a un formateador de codigo y un linter 
+y le delegas al software la habilidad de cumplir con pep8.
+
+Les dejo un articulo que les puede servir: Setup Black and Isort in VSCode
+````

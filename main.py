@@ -10,7 +10,7 @@ from pydantic import EmailStr
 #FastAPI
 from fastapi import FastAPI
 from fastapi import status
-from fastapi import Body, Query, Path, Form, Header, Cookie
+from fastapi import Body, Query, Path, Form, Header, Cookie, File, UploadFile
 
 app = FastAPI()
 
@@ -398,3 +398,23 @@ def contact(
         ads: Optional[str] = Cookie(default=None)
 ):
     return user_agent
+
+
+@app.post(
+    path="/post-image"
+)
+def post_image(
+        image: UploadFile = File(...)
+):
+
+    size_file = len(image.file.read())
+    return {
+        "Filename": image.filename,
+        "Format": image.content_type,
+        "Size(byte)": size_file,  # al leer un archivo podemos pasarla por len para obtener los bites
+        "Size(kb)": size_file/1024,  # al leer un archivo podemos pasarla por len para obtener los bites
+        "Size(kb round)": round(size_file / 1024),  # al leer un archivo podemos pasarla por len para obtener los bites
+        "Size(kb Round c 2 digitos )": round(size_file / 1024, ndigits=2)  # al leer un archivo podemos pasarla por len para obtener los bites
+    }
+
+    pass
