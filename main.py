@@ -205,7 +205,8 @@ def home():
 ## path operation path decoration
 @app.post(
     path="/person/new",
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    tags=["Persons"]
 )  # Path operation decoration
 def create_person(person: Person = Body(...)):      # Path operation function
     return person
@@ -213,7 +214,8 @@ def create_person(person: Person = Body(...)):      # Path operation function
 @app.post(
     path="/person/new/four",
     response_model=PersonFourOut,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    tags=["Persons"]
 )  # Path operation decoration
 def create_person(person: PersonFour = Body(...)):      # Path operation function
     return person
@@ -221,7 +223,8 @@ def create_person(person: PersonFour = Body(...)):      # Path operation functio
 @app.post(
     path="/person/new/four/fix",
     response_model=PersonFourOutFix,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    tags=["Persons"]
 )  # Path operation decoration
 def create_person(person: PersonFourFix = Body(...)):      # Path operation function
     return person
@@ -231,7 +234,8 @@ def create_person(person: PersonFourFix = Body(...)):      # Path operation func
 # validaciones query parameters
 @app.get(
     path='/person/detail',
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"]
 )
 def show_person(
         name: Optional[str] = Query(
@@ -258,7 +262,8 @@ def show_person(
 persons = [1,2,3,4,5]
 @app.get(
     path='/person/detail/{person_id}',
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"]
 )
 def show_person(
     person_id: int = Path(
@@ -283,7 +288,10 @@ def show_person(
 
 
 # validaciones: Request body
-@app.put("/person/{person_id}")
+@app.put(
+    path="/person/{person_id}",
+    tags=["Persons"]
+)
 def update_person(
 
     person_id: int = Path(
@@ -308,7 +316,8 @@ def update_person(
 
 @app.put(
     path="/person/two/{person_id}",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"]
 )
 def update_person_two(
 
@@ -333,7 +342,8 @@ def update_person_two(
 
 @app.put(
     path="/person/three/{person_id}",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"]
 )
 def update_person_three(
 
@@ -353,7 +363,8 @@ def update_person_three(
 
 @app.put(
     path="/person/four/{person_id}",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"]
 )
 def update_person_four(
 
@@ -374,7 +385,8 @@ def update_person_four(
 @app.post(
     path="/login",
     response_model=loginOut,
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Logins"]
 )
 def login(
         username: str = Form(...), password: str = Form(...)
@@ -385,7 +397,8 @@ def login(
 ## Cookies and Headers Parameters
 @app.post(
     path="/contact",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Contacts"]
 )
 def contact(
         first_name: str = Form(
@@ -410,7 +423,8 @@ def contact(
 
 
 @app.post(
-    path="/post-image"
+    path="/post-image",
+    tags=['Images']
 )
 def post_image(
         image: UploadFile = File(...)
