@@ -206,9 +206,21 @@ def home():
 @app.post(
     path="/person/new",
     status_code=status.HTTP_201_CREATED,
-    tags=["Persons"]
+    tags=["Persons"],
+    summary="Create Person in the APP"
 )  # Path operation decoration
+
 def create_person(person: Person = Body(...)):      # Path operation function
+    """
+    Create Person
+
+    This path operation create a person in the app and save information in the database.
+    :param person:
+    - Request Body paramaeters:
+        - **person: Person** -> A person model with first name, last name, age, hair color and marital status.
+
+    :return: A Person Model with first name, last name, age, hair color and marital status.
+    """
     return person
 
 @app.post(
@@ -235,7 +247,8 @@ def create_person(person: PersonFourFix = Body(...)):      # Path operation func
 @app.get(
     path='/person/detail',
     status_code=status.HTTP_200_OK,
-    tags=["Persons"]
+    tags=["Persons"],
+    deprecated=True
 )
 def show_person(
         name: Optional[str] = Query(
@@ -429,7 +442,11 @@ def contact(
 def post_image(
         image: UploadFile = File(...)
 ):
-
+    """
+    **ACA hay cosas pasa realizar.**
+    :param image:
+    :return:
+    """
     size_file = len(image.file.read())
     return {
         "Filename": image.filename,

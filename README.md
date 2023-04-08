@@ -178,3 +178,43 @@ y le delegas al software la habilidad de cumplir con pep8.
 
 Les dejo un articulo que les puede servir: Setup Black and Isort in VSCode
 ````
+
+
+# Deprecar una pieza de código sucede cuando:
+
+Se encuentra un mejor método mas eficiente para resolver un problema que nosotros ya tenemos. Lo que hacemos no es eliminar dicho método si no la dejamos sin efecto. Para aprovechar el código posteriormente si lo requerimos nuevamente.
+Una funcionalidad diferente de nuestro código a la que ya tenemos definidos.
+Cuando se esta realizando una refactorización profunda del código, debido a que no tiene las mejores practicas, se define deprecar las path operation que se tienen por otras nuevas y se reemplazan. Nota: Siempre es mejor mantener el código que modificarlo desde cero.
+
+Dentro del path operation decoratior colocamos un parametro llado: ``deprecated=True``
+De esta forma ya queda deprecado el endpoint.
+
+```
+@app.get(
+    path='/person/detail',
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"],
+    deprecated=True
+)
+def show_person(
+        name: Optional[str] = Query(
+            default=None,
+            min_length=1,
+            max_length=50,
+            regex="^[a-zA-Z]*$",
+            title="Person Name",
+            description="This is the person name. It's between 1 and 50 characters"
+        ),
+        age: int = Query(
+            ...,
+            title="Person Age",
+            description="This is the person age. It's required"
+        )
+):
+    return {
+        name: age
+    }
+```
+
+![Screenshot 2023-04-08 at 13.24.49.png](Screenshot%202023-04-08%20at%2013.24.49.png)
+
