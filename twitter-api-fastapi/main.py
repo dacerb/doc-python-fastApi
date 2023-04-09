@@ -205,8 +205,43 @@ def home():
     summary="Post a tweet",
     tags=["Tweets"]
 )
-def post():
-    pass
+def post(tweet: Tweet = Body(...)):
+    """
+        ## Post
+
+        #### This path operations post a tweet in the app.
+
+
+        - :parameter:
+            - Request body:
+                - tweet: Tweet
+
+
+        - :return: a Json with the basic user information
+            - tweet_id: UUID
+            - by: User
+            - content: str
+            - created_at: datetime
+             - updated_at: Optional datetime
+    """
+    with open("tweets.json", "r+", encoding="utf-8") as file:
+
+        results_data = json.loads(file.read())
+
+        tweet_dict = tweet.dict()
+        tweet_dict['tweet_id'] = str(tweet_dict['tweet_id'])
+        tweet_dict['created_at'] = str(tweet_dict['created_at'])
+        tweet_dict['by']['user_id'] = str(tweet_dict['by']['user_id'])
+        tweet_dict['by']['birth_date'] = str(tweet_dict['by']['birth_date'])
+
+        if tweet_dict.get("updated_at", None):
+            tweet_dict['updated_at'] = str(tweet_dict['updated_at'])
+
+        results_data.append(tweet_dict)
+
+        file.seek(0)
+        file.write(json.dumps(results_data))
+        return tweet
 
 ### Show a tweet
 @app.get(
