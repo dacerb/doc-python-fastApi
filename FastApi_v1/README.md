@@ -144,13 +144,13 @@ poetry add pydantic[email]
 
 #### Tipos de entradas de datos en FastAPI:
 
-- ath Parameters -> URL y obligatorios
-- uery Parameters -> URL y opcionales
-- equest Body -> JSON
-- ormularios -> Campos en el frontend
-- eaders -> Cabeceras HTTP que pueden ser de cliente a servidor y viceversa
-- ookies -> Almacenan información
-- iles -> Archivos como imágenes, audio, vídeo, etc.
+- Path Parameters -> URL y obligatorios
+- Query Parameters -> URL y opcionales
+- Request Body -> JSON
+- Formularios -> Campos en el frontend
+- Headers -> Cabeceras HTTP que pueden ser de cliente a servidor y viceversa
+- Cookies -> Almacenan información
+- Files -> Archivos como imágenes, audio, vídeo, etc.
 Para manejar archivos con FastAPI necesitamos de las clases ‘File’ y ‘Upload File’.
 
 #### Upload file tiene 3 parámetros:
@@ -160,11 +160,11 @@ Para manejar archivos con FastAPI necesitamos de las clases ‘File’ y ‘Uplo
 - File -> El archivo en sí mismo
 
 
-![Captura de pantalla 2023-03-27 205438.png](Captura%20de%20pantalla%202023-03-27%20205438.png)
+![Captura de pantalla 2023-03-27 205438.png](Captura de pantalla 2023-03-27 205438.png)
 
 
 # Ordenamiento de importacion 
-![Captura de pantalla 2023-04-02 120120.png](Captura%20de%20pantalla%202023-04-02%20120120.png)
+![Captura de pantalla 2023-04-02 120120.png](Captura de pantalla 2023-04-02 120120.png)
 
 ````commandline
 COMENTARIOS:
@@ -216,5 +216,5 @@ def show_person(
     }
 ```
 
-![Screenshot 2023-04-08 at 13.24.49.png](Screenshot%202023-04-08%20at%2013.24.49.png)
+![Screenshot 2023-04-08 at 13.24.49.png](Screenshot 2023-04-08 at 13.24.49.png)
 
