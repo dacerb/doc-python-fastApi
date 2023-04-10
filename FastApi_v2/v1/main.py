@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Body, Path, Query
+from fastapi import FastAPI, Body, Path, Query, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, Field
 from typing import Optional, List
@@ -84,13 +84,13 @@ def message():
         """
     )
 
-@app.get("/movies", tags=["movies"], response_model=List[Movie])
+@app.get("/movies", tags=["movies"], response_model=List[Movie], status_code=status.HTTP_200_OK)
 def get_movies() -> List[Movie]:
-    return JSONResponse(content=movies)
+    return JSONResponse(content=movies, status_code=status.HTTP_200_OK)
 
 
 ## Path parameters  Obligatorio
-@app.get("/movies/{id}", tags=["movies"], response_model=Movie)
+@app.get("/movies/{id}", tags=["movies"], response_model=Movie, status_code=status.HTTP_200_OK)
 def get_movie(id: int = Path(
     ge=1,
     le=2000
@@ -102,27 +102,27 @@ def get_movie(id: int = Path(
     """
     for item in movies:
         if item['id'] == id:
-            return JSONResponse(content=item)
+            return JSONResponse(content=item, status_code=status.HTTP_200_OK)
 
-    return JSONResponse(content=[])
+    return JSONResponse(content=[], status_code=status.HTTP_404_NOT_FOUND)
 
 
 ## Query parameters  Obligatorio
-@app.get("/movies/", tags=["movies"], response_model=List[Movie])  ## para evitar sobre escritura con otros endpoints podemos añadir una barra al final al usar query paramters
+@app.get("/movies/", tags=["movies"], response_model=List[Movie], status_code=status.HTTP_200_OK)  ## para evitar sobre escritura con otros endpoints podemos añadir una barra al final al usar query paramters
 def get_movies_by_category(category: str = Query(
     min_length=5,
     max_length=15
 )) -> List[Movie]:   # AL indicar en la funcion que recibe un valor pero no esta indicado en el path FastApi interpreta que es un Query parameter.
     data = [item for item in movies if item['category'] == category]
-    return JSONResponse(content=data)
+    return JSONResponse(content=data, status_code=status.HTTP_200_OK)
 
 
-@app.post("/movies", tags=["movies"], response_model=dict)
+@app.post("/movies", tags=["movies"], response_model=dict, status_code=status.HTTP_201_CREATED)
 def create_movie(movie: Movie) -> dict:
     movies.append(movie)
-    return JSONResponse(content={"message": "Se registro la pelicula"})
+    return JSONResponse(content={"message": "Se registro la pelicula"}, status_code=status.HTTP_201_CREATED)
 
-@app.put("/movies/{id}", tags=['movies'], response_model=dict)
+@app.put("/movies/{id}", tags=['movies'], response_model=dict, status_code=status.HTTP_200_OK)
 def update_movie(id: int, movie: Movie) -> dict:
 
     for item in movies:
@@ -132,12 +132,12 @@ def update_movie(id: int, movie: Movie) -> dict:
             item['year'] = movie.year
             item['category'] = movie.category
             item['rating'] = movie.rating
-            return JSONResponse(content={"message": "Se ha modificado la película"})
+            return JSONResponse(content={"message": "Se ha modificado la película"}, status_code=status.HTTP_200_OK)
 
-@app.delete("/movies/{id}", tags=['movies'], response_model=dict)
+@app.delete("/movies/{id}", tags=['movies'], response_model=dict, status_code=status.HTTP_200_OK)
 def update_movie(id: int) -> dict:
 
     for item in movies:
         if item.get('id') == id:
             movies.remove(item)
-            return JSONResponse(content={"message": "Se ha eliminado la pelicula"})
+            return JSONResponse(content={"message": "Se ha eliminado la pelicula"}, status_code=status.HTTP_200_OK)
