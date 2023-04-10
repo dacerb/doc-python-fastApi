@@ -1,7 +1,9 @@
-from fastapi import FastAPI, Body, Path, Query, status
+from fastapi import FastAPI, Body, Path, Query, status, Request, HTTPException, Depends
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, Field
 from typing import Optional, List
+from jwt_manager import create_token, validate_token
+from fastapi.security import HTTPBearer
 
 app = FastAPI()
 app.title = "Mi Aplicación con FastAPI"
@@ -45,6 +47,25 @@ class Movie(BaseModel):
             }
         }
 
+class User(BaseModel):
+    email: str
+    password: str
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "email":"admin@mail.com",
+                "password": "admin"
+            }
+        }
+
+
+class JWTBearer(HTTPBearer):
+    async def __call__(self, request: Request):
+        auth = await super().__call__(request)
+        data = validate_token(auth.credentials)
+        if data['email'] != "admin@mail.com":
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Credenciales son invalidas")
 
 movies = [
     {
@@ -84,7 +105,7 @@ def message():
         """
     )
 
-@app.get("/movies", tags=["movies"], response_model=List[Movie], status_code=status.HTTP_200_OK)
+@app.get("/movies", tags=["movies"], response_model=List[Movie], status_code=status.HTTP_200_OK, dependencies=[Depends(JWTBearer())])
 def get_movies() -> List[Movie]:
     return JSONResponse(content=movies, status_code=status.HTTP_200_OK)
 
@@ -141,3 +162,16 @@ def update_movie(id: int) -> dict:
         if item.get('id') == id:
             movies.remove(item)
             return JSONResponse(content={"message": "Se ha eliminado la pelicula"}, status_code=status.HTTP_200_OK)
+
+
+@app.post(
+    path="/login",
+    tags=["Auth"],
+    status_code=status.HTTP_200_OK
+
+)
+def login(user: User = Body(...)):
+
+    if user.email == "admin@mail.com" and user.password == "admin":
+        token: str = create_token(user.dict())
+        return JSONResponse(content=token, status_code=status.HTTP_200_OK)
