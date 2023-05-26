@@ -170,23 +170,36 @@ def create_movie(movie: Movie) -> dict:
 
 @app.put("/movies/{id}", tags=['movies'], response_model=dict, status_code=status.HTTP_200_OK)
 def update_movie(id: int, movie: Movie) -> dict:
+    db = Session()
+    result = db.query(MovieModel).filter(
+        MovieModel.id == id
+    ).first()
 
-    for item in movies:
-        if item['id'] == id:
-            item['title'] = movie.title
-            item['overview'] = movie.overview
-            item['year'] = movie.year
-            item['category'] = movie.category
-            item['rating'] = movie.rating
-            return JSONResponse(content={"message": "Se ha modificado la película"}, status_code=status.HTTP_200_OK)
+    if not result:
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"message": "No encontrado"})
+
+
+    result.title = movie.title
+    result.overview = movie.overview
+    result.rating = movie.rating
+    result.year = movie.year
+    result.category = movie.category
+    db.commit()
+    return JSONResponse(content={"message": "Se ha modificado la película"}, status_code=status.HTTP_200_OK)
 
 @app.delete("/movies/{id}", tags=['movies'], response_model=dict, status_code=status.HTTP_200_OK)
 def update_movie(id: int) -> dict:
+    db = Session()
+    result = db.query(MovieModel).filter(
+        MovieModel.id == id
+    ).first()
 
-    for item in movies:
-        if item.get('id') == id:
-            movies.remove(item)
-            return JSONResponse(content={"message": "Se ha eliminado la pelicula"}, status_code=status.HTTP_200_OK)
+    if not result:
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"message": "No encontrado"})
+
+    db.delete(result)
+    db.commit()
+    return JSONResponse(content={"message": "Se ha eliminado la pelicula"}, status_code=status.HTTP_200_OK)
 
 
 @app.post(
