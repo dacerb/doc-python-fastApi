@@ -5,7 +5,8 @@ from typing import Optional, List
 from jwt_manager import create_token, validate_token
 from fastapi.security import HTTPBearer
 from config.database import Session, engine, Base
-from models.movie import Movie
+from models.movie import Movie as MovieModel
+from fastapi.encoders import jsonable_encoder
 
 app = FastAPI()
 app.title = "Mi Aplicación con FastAPI"
@@ -112,7 +113,9 @@ def message():
 
 @app.get("/movies", tags=["movies"], response_model=List[Movie], status_code=status.HTTP_200_OK, dependencies=[Depends(JWTBearer())])
 def get_movies() -> List[Movie]:
-    return JSONResponse(content=movies, status_code=status.HTTP_200_OK)
+    db = Session()
+    result = db.query(MovieModel).all()
+    return JSONResponse(content=jsonable_encoder(result), status_code=status.HTTP_200_OK)
 
 
 ## Path parameters  Obligatorio
@@ -126,11 +129,17 @@ def get_movie(id: int = Path(
     :param id: int
     :return: item
     """
-    for item in movies:
-        if item['id'] == id:
-            return JSONResponse(content=item, status_code=status.HTTP_200_OK)
+    db = Session()
+    result = db.query(MovieModel).filter(
+        MovieModel.id == id
+    ).first()
+    #for item in movies:
+    #    if item['id'] == id:
+    #        return JSONResponse(content=item, status_code=status.HTTP_200_OK)
+    if not result:
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"message": "No encontrado"})
 
-    return JSONResponse(content=[], status_code=status.HTTP_404_NOT_FOUND)
+    return JSONResponse(content=jsonable_encoder(result), status_code=status.HTTP_200_OK)
 
 
 ## Query parameters  Obligatorio
@@ -139,13 +148,24 @@ def get_movies_by_category(category: str = Query(
     min_length=5,
     max_length=15
 )) -> List[Movie]:   # AL indicar en la funcion que recibe un valor pero no esta indicado en el path FastApi interpreta que es un Query parameter.
-    data = [item for item in movies if item['category'] == category]
-    return JSONResponse(content=data, status_code=status.HTTP_200_OK)
+    #data = [item for item in movies if item['category'] == category]
+    db = Session()
+    result =db.query(MovieModel).filter(
+        MovieModel.category == category
+    ).all()
+    if not result:
+        return JSONResponse(content={'message': "No se encontraron por esa categoria"}, status_code=status.HTTP_404_NOT_FOUND)
+
+    return JSONResponse(content=jsonable_encoder(result), status_code=status.HTTP_200_OK)
 
 
 @app.post("/movies", tags=["movies"], response_model=dict, status_code=status.HTTP_201_CREATED)
 def create_movie(movie: Movie) -> dict:
-    movies.append(movie)
+    db = Session()
+    new_movie = MovieModel(**movie.dict())
+    db.add(new_movie)
+    db.commit()
+    #movies.append(movie)
     return JSONResponse(content={"message": "Se registro la pelicula"}, status_code=status.HTTP_201_CREATED)
 
 @app.put("/movies/{id}", tags=['movies'], response_model=dict, status_code=status.HTTP_200_OK)
