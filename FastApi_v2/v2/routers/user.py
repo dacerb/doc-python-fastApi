@@ -1,22 +1,9 @@
 from fastapi import Body, APIRouter
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
 from middlewares.jwt_bearer import create_token
-
+from schemas.user import User
 
 user_router = APIRouter()
-
-class User(BaseModel):
-    email: str
-    password: str
-
-    class Config:
-        schema_extra = {
-            "example": {
-                "email":"admin@mail.com",
-                "password": "admin"
-            }
-        }
 
 @user_router.post(
     path="/login",
